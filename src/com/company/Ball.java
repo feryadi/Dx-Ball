@@ -107,7 +107,7 @@ public class Ball extends Ellipse2D.Double {
 
         }
 
-        float changeFactor = (float) 180 / myJoystick.getWidth();
+        double changeFactor = 180.0 / myJoystick.getWidth();
         double vectorLength = Math.sqrt(velocity.y * velocity.y + velocity.x * velocity.x);
 
         if (getX() >= Shape.myJoystick.getX()) {

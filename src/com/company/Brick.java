@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Brick {
-    private static Graphics g;
     private int x;
     private int y;
     private int width;
@@ -86,11 +85,11 @@ public class Brick {
         else
             return health * 1.0 / maxHealth;
     }
-
     static void placeBricks(int x, int y) {
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
-                brickList.add(new Brick(125 + (i * 45), (100 + (j * 20)), 45, 20, 2));
+                brickList.add(new Brick((Shape.screenWidth) / 12 + (i * Shape.screenWidth / 30), ((Shape.screenHeight) / 8 + (j * Shape.screenHeight) / 40), Shape.screenWidth / 31, Shape.screenHeight / 42, 2));
+
             }
         }
     }

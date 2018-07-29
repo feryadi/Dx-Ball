@@ -33,11 +33,11 @@ public class Shape extends JFrame implements MouseMotionListener {
      */
 
 
-    static ControlStick myJoystick = new ControlStick(((Shape.screenWidth) - (15 * (Shape.screenWidth) / 100)) / 2, 93 * (Shape.screenHeight) / 100, 15 * (screenWidth) / 100, 2 * (Shape.screenHeight) / 100, true, false);
+    static ControlStick myJoystick = new ControlStick(((Shape.screenWidth) - ((Shape.screenWidth) * 15 / 100)) / 2, 93 * (Shape.screenHeight) / 100, (screenWidth) * 15 / 100, (Shape.screenHeight) * 2 / 100, true, false);
     private static Ball myFirstBall = new Ball(630, 600, 10, true);
-    private static Wall myLeftWall = new Wall(0, (4 * (Shape.screenHeight) / 100), (5 / 2) * (Shape.screenWidth) / 100, Shape.screenHeight);
-    private static Wall myTopWall = new Wall(0, 0, Shape.screenWidth, (4 * (Shape.screenHeight) / 100));
-    static Wall myRightWall = new Wall((Shape.screenWidth) - (5 / 2) * (Shape.screenWidth) / 100, 0, (5 / 2) * (Shape.screenWidth) / 100, Shape.screenHeight);
+    private static Wall myLeftWall = new Wall(0, ((Shape.screenHeight) *4/ 100), (Shape.screenWidth) *5/ (2*100), Shape.screenHeight);
+    private static Wall myTopWall = new Wall(0, 0, Shape.screenWidth, ((Shape.screenHeight)*4 / 100));
+    static Wall myRightWall = new Wall((Shape.screenWidth) - (Shape.screenWidth) *5/ (2*100), 0, (Shape.screenWidth) *5/ (2*100), Shape.screenHeight);
     private static Weapon myLeftWeapon = new Weapon(myJoystick.getX() + 10, myJoystick.getY() - 10, 10, 10, true, false);
     private static Weapon myRightWeapon = new Weapon(myJoystick.getX() + myJoystick.getWidth() - 20, myJoystick.getY() - 10, 10, 10, true, false);
 
