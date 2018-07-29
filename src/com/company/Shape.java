@@ -42,7 +42,6 @@ public class Shape extends JFrame implements MouseMotionListener {
     private static Weapon myRightWeapon = new Weapon(myJoystick.getX() + myJoystick.getWidth() - 20, myJoystick.getY() - 10, 10, 10, true, false,false);
     private static Wall defenceWall = new Wall(0, (Shape.screenHeight)*95 / 100, (Shape.screenWidth), 10);
 
-
     public Shape(int width, int height) {
         setSize(width, height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -134,6 +133,9 @@ public class Shape extends JFrame implements MouseMotionListener {
 
         for (Brick brick : Brick.brickList) {
             brick.draw(graphics);
+        }
+        for (PowerUp powerUp : PowerUp.powerUpList) {
+            powerUp.draw(graphics);
         }
 
 

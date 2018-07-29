@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static com.company.Shape.myJoystick;
 import static com.company.Shape.velocity;
@@ -14,6 +15,7 @@ public class Ball extends Ellipse2D.Double {
     private double y;
     private double radius;
     private boolean mobile;
+    Random random = new Random();
 
     static final List<Ball> ballList = new ArrayList<>();
 
@@ -107,6 +109,7 @@ public class Ball extends Ellipse2D.Double {
 
         }
 
+
         double changeFactor = 180.0 / myJoystick.getWidth();
         double vectorLength = Math.sqrt(velocity.y * velocity.y + velocity.x * velocity.x);
 
@@ -129,6 +132,7 @@ public class Ball extends Ellipse2D.Double {
                     brick.setHealth(brick.getHealth() - 1);
                     if (brick.getHealth() == 0) {
                         brick.setDestroyed(true);
+                        powerUpCaller(brick);
                     }
                 }
                 if (getX() - brick.getX() <= brick.getWidth() && Math.abs(getY() + getRadius() - brick.getY()) < 0.1) {
@@ -136,6 +140,7 @@ public class Ball extends Ellipse2D.Double {
                     brick.setHealth(brick.getHealth() - 1);
                     if (brick.getHealth() == 0) {
                         brick.setDestroyed(true);
+                        powerUpCaller(brick);
                     }
                 }
             }
@@ -145,6 +150,7 @@ public class Ball extends Ellipse2D.Double {
                     brick.setHealth(brick.getHealth() - 1);
                     if (brick.getHealth() == 0) {
                         brick.setDestroyed(true);
+                        powerUpCaller(brick);
                     }
                 }
                 if (getY() - brick.getY() <= brick.getHeight() && Math.abs(getX() - getRadius() - brick.getX() - brick.getWidth()) < 0.1) {
@@ -152,11 +158,23 @@ public class Ball extends Ellipse2D.Double {
                     brick.setHealth(brick.getHealth() - 1);
                     if (brick.getHealth() == 0) {
                         brick.setDestroyed(true);
+                        powerUpCaller(brick);
                     }
                 }
             }
 
         }
+
+        for (PowerUp powerUp : PowerUp.powerUpList) {
+        if(getX()-powerUp.getX()<=powerUp.getWidth() && getY()-powerUp.getY()<0.1) {
+            powerUp.setX(0);
+            powerUp.setY(0);
+            powerUp.setMobile(false);
+            }
+
+        }
+
+
         for (Ball ammo : Weapon.ammoList) {
             for (Brick brick : Brick.brickList) {
                 if (brick.isDestroyed()) {
@@ -170,9 +188,29 @@ public class Ball extends Ellipse2D.Double {
                 }
             }
 
-
         }
     }
+
+    /**
+     * Randoming to decide if powerUp will be called and which one to call.
+     */
+
+    private void powerUpCaller(Brick brick) {
+        if (brick.getHealth() == 0) {
+            brick.setDestroyed(true);
+            int chanceToGetPowerUp = random.nextInt(6) + 1;
+            if (chanceToGetPowerUp == 1) {
+                PowerUp powerUp = new PowerUp(brick.getX(), brick.getY() + 30, 15, 15,true);
+                PowerUp.powerUpList.add(powerUp);
+                int powerUpVariable = random.nextInt(13) + 1;
+                {
+                    PowerUp.powerUpConstructor(powerUpVariable);
+                }
+            }
+        }
+    }
+
+
 }
 
 

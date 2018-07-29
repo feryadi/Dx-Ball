@@ -21,7 +21,7 @@ public class ControlStick {
         this.height = height;
         this.weapon = weapon;
         this.grasp = grasp;
-        this.defence=defence;
+        this.defence = defence;
     }
 
 
@@ -66,6 +66,7 @@ public class ControlStick {
     public void setGrasp(boolean grasp) {
         this.grasp = grasp;
     }
+
     public boolean isDefence() {
         return defence;
     }
@@ -78,7 +79,6 @@ public class ControlStick {
         g.setColor(Color.BLACK);
         g.fillRect(x, y, width, height);
     }
-
 
 
 }

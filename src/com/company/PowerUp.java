@@ -1,18 +1,88 @@
 package com.company;
 
-import java.util.Random;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.company.Shape.velocity;
 
 public class PowerUp {
 
 
-    Random random = new Random(15);
-    int n = random.nextInt(10) + 1;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
+    private boolean mobile;
+
+    static final List<PowerUp> powerUpList = new ArrayList<>();
 
 
-    public void PowerUp(int n) {
+    public PowerUp(int x, int y, int width, int height, boolean mobile) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.mobile = mobile;
 
+    }
 
-        switch (n) {
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public boolean isMobile() {
+        return mobile;
+    }
+
+    public void setMobile(boolean mobile) {
+        this.mobile = mobile;
+    }
+
+    public void velocity() {
+        double x = velocity.x;
+        double y = velocity.y;
+
+        setX(getX() + (int) velocity.x);
+        setY(getY() + (int) velocity.y);
+    }
+
+    public void draw(Graphics g) {
+        g.setColor(Color.YELLOW);
+        g.fillRect(x, y, width, height);
+    }
+
+    public static void powerUpConstructor(int powerUpNumber) {
+
+        switch (powerUpNumber) {
             case 1:
                 /**
                  *  making ball twice as big while maintaining maximum size
@@ -57,6 +127,11 @@ public class PowerUp {
                 break;
             case 10:
                 //create 1 more ball and make them bounce as if there is a mirror in the middle of them.
+                for (Ball ball : Ball.ballList) {
+                    ball.getX();
+                    ball.getY();
+
+                }
                 break;
             case 11:
                 //create 2 more ball and make them move with triangle shape.

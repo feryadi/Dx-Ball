@@ -15,7 +15,6 @@ public class Brick {
 
     static final List<Brick> brickList = new ArrayList<>();
 
-
     public Brick(int x, int y, int width, int height, int health) {
         this.x = x;
         this.y = y;
