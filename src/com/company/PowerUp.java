@@ -65,7 +65,7 @@ public class PowerUp {
                 //create total of 8 balls out of 1 ball moving symmetrically away from each other
                 break;
             case 13:
-
+                Shape.myJoystick.setDefence(true);
                 break;
         }
     }
