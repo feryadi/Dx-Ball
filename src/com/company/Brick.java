@@ -87,7 +87,7 @@ public class Brick {
     static void placeBricks(int x, int y) {
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
-                brickList.add(new Brick(125 + (i * 45), (100 + (j * 20)), 44, 19, 2));
+                brickList.add(new Brick(125 + (i * 45), (100 + (j * 20)), 45, 20, 2));
             }
         }
     }

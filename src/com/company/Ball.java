@@ -15,7 +15,7 @@ public class Ball extends Ellipse2D.Double {
     private double y;
     private double radius;
     private boolean mobile;
-    Random random = new Random();
+    private Random random = new Random();
 
     static final List<Ball> ballList = new ArrayList<>();
 
@@ -132,6 +132,7 @@ public class Ball extends Ellipse2D.Double {
                     brick.setHealth(brick.getHealth() - 1);
                     if (brick.getHealth() == 0) {
                         brick.setDestroyed(true);
+                        gameWinningCondition(brick);
                         powerUpCaller(brick);
                     }
                 }
@@ -140,6 +141,7 @@ public class Ball extends Ellipse2D.Double {
                     brick.setHealth(brick.getHealth() - 1);
                     if (brick.getHealth() == 0) {
                         brick.setDestroyed(true);
+                        gameWinningCondition(brick);
                         powerUpCaller(brick);
                     }
                 }
@@ -150,6 +152,7 @@ public class Ball extends Ellipse2D.Double {
                     brick.setHealth(brick.getHealth() - 1);
                     if (brick.getHealth() == 0) {
                         brick.setDestroyed(true);
+                        gameWinningCondition(brick);
                         powerUpCaller(brick);
                     }
                 }
@@ -158,6 +161,7 @@ public class Ball extends Ellipse2D.Double {
                     brick.setHealth(brick.getHealth() - 1);
                     if (brick.getHealth() == 0) {
                         brick.setDestroyed(true);
+                        gameWinningCondition(brick);
                         powerUpCaller(brick);
                     }
                 }
@@ -166,10 +170,10 @@ public class Ball extends Ellipse2D.Double {
         }
 
         for (PowerUp powerUp : PowerUp.powerUpList) {
-        if(getX()-powerUp.getX()<=powerUp.getWidth() && getY()-powerUp.getY()<0.1) {
-            powerUp.setX(0);
-            powerUp.setY(0);
-            powerUp.setMobile(false);
+            if (myJoystick.getX() - powerUp.getX() <= powerUp.getWidth() && myJoystick.getY() - powerUp.getY() < 0.1) {
+                powerUp.setX(0);
+                powerUp.setY(0);
+                powerUp.setMobile(false);
             }
 
         }
@@ -196,20 +200,23 @@ public class Ball extends Ellipse2D.Double {
      */
 
     private void powerUpCaller(Brick brick) {
-        if (brick.getHealth() == 0) {
-            brick.setDestroyed(true);
-            int chanceToGetPowerUp = random.nextInt(6) + 1;
-            if (chanceToGetPowerUp == 1) {
-                PowerUp powerUp = new PowerUp(brick.getX(), brick.getY() + 30, 15, 15,true);
-                PowerUp.powerUpList.add(powerUp);
-                int powerUpVariable = random.nextInt(13) + 1;
-                {
-                    PowerUp.powerUpConstructor(powerUpVariable);
-                }
+        int chanceToGetPowerUp = random.nextInt(6) + 1;
+        if (chanceToGetPowerUp == 1) {
+            PowerUp powerUp = new PowerUp(brick.getX() + brick.getWidth() / 4, brick.getY() - 30, 25, 25, true);
+            PowerUp.powerUpList.add(powerUp);
+            int powerUpVariable = random.nextInt(13) + 1;
+            {
+                PowerUp.powerUpConstructor(powerUpVariable);
             }
         }
     }
 
+
+    private void gameWinningCondition(Brick brick) {
+        if (brick.isDestroyed()) {
+            System.out.println("You Win!");
+        }
+    }
 
 }
 

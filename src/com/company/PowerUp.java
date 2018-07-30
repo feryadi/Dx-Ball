@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.company.Shape.myJoystick;
 import static com.company.Shape.velocity;
 
 public class PowerUp {
@@ -103,10 +104,13 @@ public class PowerUp {
 
                 break;
             case 3:
-                Shape.myJoystick.setWidth(Shape.myJoystick.getWidth() / 2);
+                if (Shape.myJoystick.getWidth() > Shape.screenWidth * 15 / 100) {
+                    Shape.myJoystick.setWidth(Shape.myJoystick.getWidth() / 2);
+                }
                 break;
-            case 4:
+            case 4:if (Shape.myJoystick.getWidth() < Shape.screenWidth* 30 / 100) {
                 Shape.myJoystick.setWidth(Shape.myJoystick.getWidth() * 2);
+            }
                 break;
             case 5:
                 for (Brick brick : Brick.brickList) {
@@ -130,7 +134,6 @@ public class PowerUp {
                 for (Ball ball : Ball.ballList) {
                     ball.getX();
                     ball.getY();
-
                 }
                 break;
             case 11:
@@ -141,6 +144,14 @@ public class PowerUp {
                 break;
             case 13:
                 Shape.myJoystick.setDefence(true);
+                break;
+            case 14:
+                for (Ball ball : Ball.ballList) {
+                    ball.velocity();  // 2 kat hız
+                }
+                break;
+            case 15:
+
                 break;
         }
     }
