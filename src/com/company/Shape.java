@@ -8,7 +8,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class Shape extends JFrame implements MouseMotionListener {
+public class Shape extends JFrame {
 
 
     static public int[][] map;
@@ -32,31 +32,84 @@ public class Shape extends JFrame implements MouseMotionListener {
      */
 
 
-    static ControlStick myJoystick = new ControlStick(((Shape.screenWidth) - ((Shape.screenWidth) * 15 / 100)) / 2,  Shape.screenHeight *93/ 100, screenWidth * 15 / 100, (Shape.screenHeight) * 3 / 200, true, false,false);
-    private static Ball myFirstBall = new Ball(630, 600, 5, true);
-    private static Wall myLeftWall = new Wall(0, ((Shape.screenHeight) *4/ 100), (Shape.screenWidth) *5/ (2*100), Shape.screenHeight);
-    private static Wall myTopWall = new Wall(0, 0, Shape.screenWidth, ((Shape.screenHeight)*4 / 100));
-    static Wall myRightWall = new Wall((Shape.screenWidth) - (Shape.screenWidth) *5/ (2*100), 0, (Shape.screenWidth) *5/ (2*100), Shape.screenHeight);
-    private static Weapon myLeftWeapon = new Weapon(myJoystick.getX() + 10, myJoystick.getY() - 10, 7, 15, true, false,false);
-    private static Weapon myRightWeapon = new Weapon(myJoystick.getX() + myJoystick.getWidth() - 20, myJoystick.getY() - 10, 7, 15, true, false,false);
-    private static Wall defenceWall = new Wall(0, (Shape.screenHeight)*95 / 100, (Shape.screenWidth), 10);
+    static ControlStick myJoystick = new ControlStick(((Shape.screenWidth) - ((Shape.screenWidth) * 15 / 100)) / 2, Shape.screenHeight * 93 / 100, screenWidth * 15 / 100, (Shape.screenHeight) * 3 / 200, true, false, false);
+    private static Ball myFirstBall = new Ball(630, 600, 5, true,false);
+    private static Wall myLeftWall = new Wall(0, ((Shape.screenHeight) * 4 / 100), (Shape.screenWidth) * 5 / (2 * 100), Shape.screenHeight);
+    private static Wall myTopWall = new Wall(0, 0, Shape.screenWidth, ((Shape.screenHeight) * 4 / 100));
+    private static Wall myRightWall = new Wall((Shape.screenWidth) - (Shape.screenWidth) * 5 / (2 * 100), 0, (Shape.screenWidth) * 5 / (2 * 100), Shape.screenHeight);
+    private static Weapon myLeftWeapon = new Weapon(myJoystick.getX() + 10, myJoystick.getY() - 10, 7, 15, true, false, false);
+    private static Weapon myRightWeapon = new Weapon(myJoystick.getX() + myJoystick.getWidth() - 20, myJoystick.getY() - 10, 7, 15, true, false, false);
+    private static Wall defenceWall = new Wall(0, (Shape.screenHeight) * 95 / 100, (Shape.screenWidth), 10);
 
     public Shape(int width, int height) {
         setSize(width, height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setLocationRelativeTo(null);
-        addMouseMotionListener(this);
-        addKeyListener(new KeyListener() {
+        addMouseMotionListener((new MouseMotionListener() {
             @Override
-            public void keyTyped(KeyEvent e) {
-                int keyCode = e.getKeyCode();
-                if (keyCode == KeyEvent.VK_KP_RIGHT && myJoystick.isWeapon()) {
-                    Ball myLeftAmmo = new Ball(myLeftWeapon.getX(), myLeftWeapon.getY(), 1, true);
-                    Ball myRightAmmo = new Ball(myRightWeapon.getX(), myRightWeapon.getY(), 1, true);
+            public void mouseDragged(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+
+                myJoystick.setX(e.getX() - (myJoystick.getWidth() / 2));
+                if (myJoystick.getX() < myRightWall.getWidth()) {
+                    myJoystick.setX(myRightWall.getWidth());
+                }
+                if (myJoystick.getX() + myJoystick.getWidth() > myRightWall.getX()) {
+                    myJoystick.setX(screenWidth - myRightWall.getWidth() - myJoystick.getWidth());
+                }
+                myLeftWeapon.setX(myJoystick.getX() + Shape.myJoystick.getWidth() / 10);
+                myRightWeapon.setX(myJoystick.getX() + myJoystick.getWidth() - Shape.myJoystick.getWidth() / 10 - myRightWeapon.getWidth());
+
+            }
+
+        }));
+        {
+
+        }
+        addMouseListener((new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    Ball myLeftAmmo = new Ball(myLeftWeapon.getX(), myLeftWeapon.getY(), 1, true,false);
+                    Ball myRightAmmo = new Ball(myRightWeapon.getX(), myRightWeapon.getY(), 1, true,false);
                     Weapon.ammoList.add(myLeftAmmo);
                     Weapon.ammoList.add(myRightAmmo);
                 }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        }));
+
+
+        addKeyListener(new KeyListener() {
+
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+
             }
 
             @Override
@@ -68,6 +121,8 @@ public class Shape extends JFrame implements MouseMotionListener {
             public void keyReleased(KeyEvent e) {
 
             }
+
+
         });
 
         setVisible(true);
@@ -76,7 +131,7 @@ public class Shape extends JFrame implements MouseMotionListener {
         Brick.brickList.add(myRightWall);
         Brick.brickList.add(myTopWall);
         Ball.ballList.add(myFirstBall);
-        if(myJoystick.isDefence()){
+        if (myJoystick.isDefence()) {
             Brick.brickList.add(defenceWall);
         }
 
@@ -103,7 +158,7 @@ public class Shape extends JFrame implements MouseMotionListener {
                 }
             }
         };
-        timer.scheduleAtFixedRate(task2, 0,1);
+        timer.scheduleAtFixedRate(task2, 0, 1);
 
     }
 
@@ -140,24 +195,6 @@ public class Shape extends JFrame implements MouseMotionListener {
         g2dComponent.drawImage(bufferedImage, null, 0, 0);
     }
 
-    @Override
-    public void mouseDragged(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        myJoystick.setX(e.getX() - (myJoystick.getWidth() / 2));
-        if (myJoystick.getX() < myRightWall.getWidth()) {
-            myJoystick.setX(myRightWall.getWidth());
-        }
-        if (myJoystick.getX() + myJoystick.getWidth() > myRightWall.getX()) {
-            myJoystick.setX(screenWidth - myRightWall.getWidth() - myJoystick.getWidth());
-        }
-        myLeftWeapon.setX(myJoystick.getX() + Shape.myJoystick.getWidth()/10);
-        myRightWeapon.setX(myJoystick.getX() + myJoystick.getWidth() - Shape.myJoystick.getWidth()/10-myRightWeapon.getWidth());
-
-    }
 
     public static int getPlayerHealth() {
         return playerHealth;

@@ -15,25 +15,18 @@ public class Ball extends Ellipse2D.Double {
     private double y;
     private double radius;
     private boolean mobile;
+    private boolean piercer;
     private Random random = new Random();
 
     static final List<Ball> ballList = new ArrayList<>();
 
 
-    public boolean isMobile() {
-        return mobile;
-    }
-
-    public void setMobile(boolean mobile) {
-        this.mobile = mobile;
-    }
-
-
-    public Ball(double x, double y, double radius, boolean mobile) {
+    public Ball(double x, double y, double radius, boolean mobile, boolean piercer) {
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.mobile = mobile;
+        this.piercer = piercer;
     }
 
 
@@ -62,20 +55,21 @@ public class Ball extends Ellipse2D.Double {
         return radius;
     }
 
-    public double getColYFromDown() {
-        return getY() - getRadius() / 2;
+
+    public boolean isMobile() {
+        return mobile;
     }
 
-    public double getColYFromUp() {
-        return getY() + getRadius() / 2;
+    public void setMobile(boolean mobile) {
+        this.mobile = mobile;
     }
 
-    public double getColXFromRight() {
-        return getX() - getRadius() / 2;
+    public boolean isPiercer() {
+        return piercer;
     }
 
-    public double getColXFromLeft() {
-        return getX() + getRadius() / 2;
+    public void setPiercer(boolean piercer) {
+        this.piercer = piercer;
     }
 
 
@@ -128,40 +122,64 @@ public class Ball extends Ellipse2D.Double {
             }
             if (getX() >= brick.getX()) {
                 if (getX() - brick.getX() <= brick.getWidth() && Math.abs(getY() - getRadius() - brick.getY() - brick.getHeight()) < 0.1) {
-                    velocity.y = -y;
-                    brick.setHealth(brick.getHealth() - 1);
+                    if (!isPiercer()) {
+                        velocity.y = -y;
+                        brick.setHealth(brick.getHealth() - 1);
+                    }
+                    if (isPiercer()) {
+                        brick.setHealth(0);
+                    }
+
                     if (brick.getHealth() == 0) {
                         brick.setDestroyed(true);
-                        gameWinningCondition(brick);
+                        //gameWinningCondition(brick);
                         powerUpCaller(brick);
                     }
                 }
                 if (getX() - brick.getX() <= brick.getWidth() && Math.abs(getY() + getRadius() - brick.getY()) < 0.1) {
-                    velocity.y = -y;
-                    brick.setHealth(brick.getHealth() - 1);
+                    if (!isPiercer()) {
+                        velocity.y = -y;
+                        brick.setHealth(brick.getHealth() - 1);
+                    }
+                    if (isPiercer()) {
+                        brick.setHealth(0);
+                    }
+
                     if (brick.getHealth() == 0) {
                         brick.setDestroyed(true);
-                        gameWinningCondition(brick);
+                        //gameWinningCondition(brick);
                         powerUpCaller(brick);
                     }
                 }
             }
             if ((getY() >= brick.getY())) {
                 if (getY() - brick.getY() <= brick.getHeight() && Math.abs(getX() + getRadius() - brick.getX()) < 0.1) {
-                    velocity.x = -x;
-                    brick.setHealth(brick.getHealth() - 1);
+                    if (!isPiercer()) {
+                        velocity.x = -x;
+                        brick.setHealth(brick.getHealth() - 1);
+                    }
+                    if (isPiercer()) {
+                        brick.setHealth(0);
+                    }
+
                     if (brick.getHealth() == 0) {
                         brick.setDestroyed(true);
-                        gameWinningCondition(brick);
+                        //gameWinningCondition(brick);
                         powerUpCaller(brick);
                     }
                 }
                 if (getY() - brick.getY() <= brick.getHeight() && Math.abs(getX() - getRadius() - brick.getX() - brick.getWidth()) < 0.1) {
-                    velocity.x = -x;
-                    brick.setHealth(brick.getHealth() - 1);
+                    if (!isPiercer()) {
+                        velocity.x = -x;
+                        brick.setHealth(brick.getHealth() - 1);
+                    }
+                    if (isPiercer()) {
+                        brick.setHealth(0);
+                    }
+
                     if (brick.getHealth() == 0) {
                         brick.setDestroyed(true);
-                        gameWinningCondition(brick);
+                        //gameWinningCondition(brick);
                         powerUpCaller(brick);
                     }
                 }
