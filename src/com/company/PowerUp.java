@@ -4,6 +4,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.company.Shape.myJoystick;
+import static com.company.Shape.screenHeight;
+
 public class PowerUp {
 
 
@@ -92,6 +95,22 @@ public class PowerUp {
             setX(getX() + VelX);
             setY(getY() + VelY);
         }
+
+        for (PowerUp powerUp : PowerUp.powerUpList) {
+            if (myJoystick.getX() - powerUp.getX() <= powerUp.getWidth() && myJoystick.getY() - powerUp.getY() < 0.1) {
+                powerUp.setX(0);
+                powerUp.setY(0);
+                powerUp.setMobile(false);
+                PowerUp.powerUpConstructor(PowerUp.powerUpNumber);
+            }
+            if (powerUp.getY() > screenHeight) {
+                powerUp.setX(0);
+                powerUp.setY(0);
+                powerUp.setMobile(false);
+            }
+        }
+
+
     }
 
     public void draw(Graphics g) {
@@ -122,13 +141,13 @@ public class PowerUp {
 
                 break;
             case 3:
-                if (Shape.myJoystick.getWidth() > Shape.screenWidth * 15 / 100) {
-                    Shape.myJoystick.setWidth(Shape.myJoystick.getWidth() / 2);
+                if (Shape.myJoystick.getWidth() > Shape.screenWidth * 15 / 200) {
+                    Shape.myJoystick.setWidth(Shape.myJoystick.getWidth() / 5*4);
                 }
                 break;
             case 4:
-                if (Shape.myJoystick.getWidth() < Shape.screenWidth * 30 / 100) {
-                    Shape.myJoystick.setWidth(Shape.myJoystick.getWidth() * 2);
+                if (Shape.myJoystick.getWidth() < Shape.screenWidth * 20 / 100) {
+                    Shape.myJoystick.setWidth(Shape.myJoystick.getWidth() * 5/4);
                 }
                 break;
             case 5:
@@ -149,15 +168,26 @@ public class PowerUp {
                 Shape.myJoystick.setGrasp(true);
                 break;
             case 10:
-                //create 1 more ball and make them bounce as if there is a mirror in the middle of them.
-
+                for (Ball ball : Ball.ballList) {
+                    ball.setPiercer(true);
+                }
                 break;
             case 11:
                 //create 2 more ball and make them move with triangle shape.
                 break;
             case 12:
-                //create total of 8 balls out of 1 ball moving symmetrically away from each other
+                double vectorLength;
+                for (Ball ball : Ball.ballList) {
+                    double x = ball.getX();
+                    double y = ball.getY();
+                    double velX = ball.getVelX();
+                    double velY = ball.getVelY();
+                    vectorLength = Math.sqrt(velX * velX + velY * velY);
 
+                    for (int i = 0; i < 8; i++) {
+                        new Ball(x, y, 5, vectorLength * Math.cos(Math.toRadians(i * 45)), vectorLength * Math.sin(Math.toRadians(i * 45)), true, false, true);
+                    }
+                }
                 break;
             case 13:
                 Shape.myJoystick.setDefence(true);

@@ -19,13 +19,12 @@ public class Ball extends Ellipse2D.Double {
     private double velY;
     private boolean mobile;
     private boolean piercer;
-    private boolean collision;
     private Random random = new Random();
 
     static final List<Ball> ballList = new ArrayList<>();
 
 
-    public Ball(double x, double y, double radius, double velX, double velY, boolean mobile, boolean piercer, boolean collision) {
+    public Ball(double x, double y, double radius, double velX, double velY, boolean mobile, boolean piercer) {
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -33,7 +32,6 @@ public class Ball extends Ellipse2D.Double {
         this.velY = velY;
         this.mobile = mobile;
         this.piercer = piercer;
-        this.collision = collision;
     }
 
 
@@ -94,14 +92,6 @@ public class Ball extends Ellipse2D.Double {
         this.piercer = piercer;
     }
 
-    public boolean isCollision() {
-        return collision;
-    }
-
-    public void setCollision(boolean collision) {
-        this.collision = collision;
-    }
-
 
     static void drawCircleByCenter(Graphics g, double x, double y, double radius) {
         g.setColor(Color.GRAY);
@@ -119,7 +109,6 @@ public class Ball extends Ellipse2D.Double {
 
         if (getY() >= Shape.screenHeight + getRadius()) {
             for (Ball ball : Ball.ballList) {
-                if (isCollision()) {
                     ball.setX(0);
                     ball.setY(0);
                     velocity.x = 0;
@@ -128,7 +117,7 @@ public class Ball extends Ellipse2D.Double {
                     if (!isMobile()) {
                         System.out.println("Game Over");
                     }
-                }
+
 
             }
 
@@ -156,12 +145,14 @@ public class Ball extends Ellipse2D.Double {
                 if (getX() - brick.getX() <= brick.getWidth() && Math.abs(getY() - getRadius() - brick.getY() - brick.getHeight()) < 0.1) {
                     if (!isPiercer()) {
                         brick.setHealth(brick.getHealth() - 1);
-                        if (isCollision()) {
-                            velocity.y = -VelY;
-                        }
+                        velocity.y = -VelY;
+
                     }
                     if (isPiercer()) {
                         brick.setHealth(0);
+                        if (brick instanceof Wall) {
+                            velocity.y = -VelY;
+                        }
                     }
 
                     if (brick.getHealth() == 0) {
@@ -172,12 +163,14 @@ public class Ball extends Ellipse2D.Double {
                 if (getX() - brick.getX() <= brick.getWidth() && Math.abs(getY() + getRadius() - brick.getY()) < 0.1) {
                     if (!isPiercer()) {
                         brick.setHealth(brick.getHealth() - 1);
-                        if (isCollision()) {
-                            velocity.y = -VelY;
-                        }
+                        velocity.y = -VelY;
+
                     }
                     if (isPiercer()) {
                         brick.setHealth(0);
+                        if (brick instanceof Wall) {
+                            velocity.y = -VelY;
+                        }
                     }
 
                     if (brick.getHealth() == 0) {
@@ -191,12 +184,14 @@ public class Ball extends Ellipse2D.Double {
                 if (getY() - brick.getY() <= brick.getHeight() && Math.abs(getX() + getRadius() - brick.getX()) < 0.1) {
                     if (!isPiercer()) {
                         brick.setHealth(brick.getHealth() - 1);
-                        if (isCollision()) {
-                            velocity.x = -VelX;
-                        }
+                        velocity.x = -VelX;
+
                     }
                     if (isPiercer()) {
                         brick.setHealth(0);
+                        if (brick instanceof Wall) {
+                            velocity.x = -VelX;
+                        }
                     }
 
                     if (brick.getHealth() == 0) {
@@ -207,12 +202,13 @@ public class Ball extends Ellipse2D.Double {
                 if (getY() - brick.getY() <= brick.getHeight() && Math.abs(getX() - getRadius() - brick.getX() - brick.getWidth()) < 0.1) {
                     if (!isPiercer()) {
                         brick.setHealth(brick.getHealth() - 1);
-                        if (isCollision()) {
-                            velocity.x = -VelX;
-                        }
+                        velocity.x = -VelX;
                     }
                     if (isPiercer()) {
                         brick.setHealth(0);
+                        if (brick instanceof Wall) {
+                            velocity.x = -VelX;
+                        }
                     }
 
                     if (brick.getHealth() == 0) {
@@ -225,35 +221,6 @@ public class Ball extends Ellipse2D.Double {
 
         }
 
-        for (PowerUp powerUp : PowerUp.powerUpList) {
-            if (myJoystick.getX() - powerUp.getX() <= powerUp.getWidth() && myJoystick.getY() - powerUp.getY() < 0.1) {
-                powerUp.setX(0);
-                powerUp.setY(0);
-                powerUp.setMobile(false);
-                PowerUp.powerUpConstructor(PowerUp.powerUpNumber);
-            }
-            if (powerUp.getY()>screenHeight){
-                powerUp.setX(0);
-                powerUp.setY(0);
-                powerUp.setMobile(false);
-            }
-        }
-
-
-        for (Ball ammo : Weapon.ammoList) {
-            for (Brick brick : Brick.brickList) {
-                if (brick.isDestroyed()) {
-                    continue;
-                }
-                if (ammo.getX() - brick.getX() <= brick.getWidth() && ammo.getY() - brick.getY() < 0.1) {
-                    brick.setHealth(brick.getHealth() - 1);
-                    if (brick.getHealth() == 0) {
-                        brick.setDestroyed(true);
-                    }
-                }
-            }
-
-        }
     }
 
     /**
@@ -264,7 +231,7 @@ public class Ball extends Ellipse2D.Double {
         int chanceToGetPowerUp = random.nextInt(6) + 1;
         if (chanceToGetPowerUp == 1) {
             PowerUp powerUp = new PowerUp(brick.getX() + brick.getWidth() / 4, brick.getY() - 30, 25, 25, 0, 0.125, true);
-            PowerUp.powerUpNumber = random.nextInt(15) + 1;
+            PowerUp.powerUpNumber = 13;
             PowerUp.powerUpList.add(powerUp);
 
         }
@@ -272,11 +239,4 @@ public class Ball extends Ellipse2D.Double {
 
 
 }
-
-
-
-
-
-
-
 

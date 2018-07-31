@@ -32,10 +32,10 @@ public class Shape extends JFrame {
      */
 
 
-    static ControlStick myJoystick = new ControlStick(((Shape.screenWidth) - ((Shape.screenWidth) * 15 / 100)) / 2, Shape.screenHeight * 93 / 100, screenWidth * 15 / 100, (Shape.screenHeight) * 5 / 200, true, false, false);
-    private static Ball myFirstBall = new Ball(630, 600, 5, x, y, true, false,true);
+    static ControlStick myJoystick = new ControlStick(((Shape.screenWidth) - ((Shape.screenWidth) * 15 / 100)) / 2, Shape.screenHeight * 93 / 100, screenWidth * 15 / 100, (Shape.screenHeight) * 5 / 200, false, false, false);
+    private static Ball myFirstBall = new Ball(630, 600, 5, x, y, true, true, true);
     private static Wall myLeftWall = new Wall(0, ((Shape.screenHeight) * 4 / 100), (Shape.screenWidth) * 5 / (2 * 100), Shape.screenHeight);
-    private static Wall myTopWall = new Wall(0, 0, Shape.screenWidth, ((Shape.screenHeight) * 4 / 100));
+    private static Wall myTopWall = new Wall(0, 0, Shape.screenWidth, ((Shape.screenHeight) * 6 / 100));
     private static Wall myRightWall = new Wall((Shape.screenWidth) - (Shape.screenWidth) * 5 / (2 * 100), 0, (Shape.screenWidth) * 5 / (2 * 100), Shape.screenHeight);
     private static Weapon myLeftWeapon = new Weapon(myJoystick.getX() + 10, myJoystick.getY() - 10, 7, 15, true, false, false);
     private static Weapon myRightWeapon = new Weapon(myJoystick.getX() + myJoystick.getWidth() - 20, myJoystick.getY() - 10, 7, 15, true, false, false);
@@ -75,10 +75,12 @@ public class Shape extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    Ball myLeftAmmo = new Ball(myLeftWeapon.getX(), myLeftWeapon.getY(), 4, 0, -5, true, false,false);
-                    Ball myRightAmmo = new Ball(myRightWeapon.getX(), myRightWeapon.getY(), 4, 0, -5, true, false,false);
-                    Weapon.ammoList.add(myLeftAmmo);
-                    Weapon.ammoList.add(myRightAmmo);
+                    Ammo myLeftAmmo = new Ammo(myLeftWeapon.getX(), myLeftWeapon.getY(), 4, 0, -5, true);
+                        Ammo myRightAmmo = new Ammo(myRightWeapon.getX(), myRightWeapon.getY(), 4, 0, -5, true);
+                        Ammo.ammoList.add(myLeftAmmo);
+                        Ammo.ammoList.add(myRightAmmo);
+
+
                 }
             }
 
@@ -155,11 +157,11 @@ public class Shape extends JFrame {
                 for (Ball ball : Ball.ballList) {
                     ball.velocity();
                 }
-                for (Ball ammo : Weapon.ammoList) {
-                    ammo.velocity();
+                for (Ammo ammo : Ammo.ammoList) {
+                    ammo.velocity(0, -0.125);
                 }
                 for (PowerUp powerUp : PowerUp.powerUpList) {
-                    powerUp.velocity(0,0.125);
+                    powerUp.velocity(0, 0.125);
                 }
             }
         };
@@ -178,13 +180,16 @@ public class Shape extends JFrame {
 
 
         Ball.drawCircleByCenter(graphics, myFirstBall.getX(), myFirstBall.getY(), myFirstBall.getRadius());
-        for (Ball ammo : Weapon.ammoList) {
+        for (Ammo ammo : Ammo.ammoList) {
             Ball.drawCircleByCenter(graphics, ammo.getX(), ammo.getY(), ammo.getRadius());
         }
         myJoystick.draw(graphics);
         if (myJoystick.isWeapon()) {
             myLeftWeapon.draw(graphics);
             myRightWeapon.draw(graphics);
+        }
+        if(myJoystick.isDefence()){
+            defenceWall.draw(graphics);
         }
 
 
