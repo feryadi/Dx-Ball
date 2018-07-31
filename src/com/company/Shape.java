@@ -13,14 +13,14 @@ public class Shape extends JFrame {
 
     static public int[][] map;
 
-    static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     final static double speed = 0.250;
 
     static int screenHeight = screenSize.height;
     static int screenWidth = screenSize.width;
-    static private double x = speed;
-    static private double y = -speed;
+    static double x = speed;
+    static double y = -speed;
     private static int playerHealth = 2;
 
     static Vector velocity = new Vector(x, y);
@@ -32,8 +32,8 @@ public class Shape extends JFrame {
      */
 
 
-    static ControlStick myJoystick = new ControlStick(((Shape.screenWidth) - ((Shape.screenWidth) * 15 / 100)) / 2, Shape.screenHeight * 93 / 100, screenWidth * 15 / 100, (Shape.screenHeight) * 3 / 200, true, false, false);
-    private static Ball myFirstBall = new Ball(630, 600, 5, true,false);
+    static ControlStick myJoystick = new ControlStick(((Shape.screenWidth) - ((Shape.screenWidth) * 15 / 100)) / 2, Shape.screenHeight * 93 / 100, screenWidth * 15 / 100, (Shape.screenHeight) * 5 / 200, true, false, false);
+    private static Ball myFirstBall = new Ball(630, 600, 5, x, y, true, false,true);
     private static Wall myLeftWall = new Wall(0, ((Shape.screenHeight) * 4 / 100), (Shape.screenWidth) * 5 / (2 * 100), Shape.screenHeight);
     private static Wall myTopWall = new Wall(0, 0, Shape.screenWidth, ((Shape.screenHeight) * 4 / 100));
     private static Wall myRightWall = new Wall((Shape.screenWidth) - (Shape.screenWidth) * 5 / (2 * 100), 0, (Shape.screenWidth) * 5 / (2 * 100), Shape.screenHeight);
@@ -75,8 +75,8 @@ public class Shape extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    Ball myLeftAmmo = new Ball(myLeftWeapon.getX(), myLeftWeapon.getY(), 1, true,false);
-                    Ball myRightAmmo = new Ball(myRightWeapon.getX(), myRightWeapon.getY(), 1, true,false);
+                    Ball myLeftAmmo = new Ball(myLeftWeapon.getX(), myLeftWeapon.getY(), 4, 0, -5, true, false,false);
+                    Ball myRightAmmo = new Ball(myRightWeapon.getX(), myRightWeapon.getY(), 4, 0, -5, true, false,false);
                     Weapon.ammoList.add(myLeftAmmo);
                     Weapon.ammoList.add(myRightAmmo);
                 }
@@ -152,9 +152,14 @@ public class Shape extends JFrame {
 
             @Override
             public void run() {
-                myFirstBall.velocity();
+                for (Ball ball : Ball.ballList) {
+                    ball.velocity();
+                }
                 for (Ball ammo : Weapon.ammoList) {
                     ammo.velocity();
+                }
+                for (PowerUp powerUp : PowerUp.powerUpList) {
+                    powerUp.velocity(0,0.125);
                 }
             }
         };

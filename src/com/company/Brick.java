@@ -74,7 +74,6 @@ public class Brick {
     }
 
     public void setDestroyed(boolean val) {
-
         destroyed = val;
     }
 
@@ -84,6 +83,7 @@ public class Brick {
         else
             return health * 1.0 / maxHealth;
     }
+
     static void placeBricks(int x, int y) {
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {

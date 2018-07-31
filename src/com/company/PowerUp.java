@@ -4,47 +4,49 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.company.Shape.myJoystick;
-import static com.company.Shape.velocity;
-
 public class PowerUp {
 
 
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+    private double x;
+    private double y;
+    private double width;
+    private double height;
+    private double velX;
+    private double velY;
     private boolean mobile;
+    static public int powerUpNumber;
 
     static final List<PowerUp> powerUpList = new ArrayList<>();
 
 
-    public PowerUp(int x, int y, int width, int height, boolean mobile) {
+    public PowerUp(double x, double y, double width, double height, double velX, double velY, boolean mobile) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.velX = velX;
+        this.velY = velY;
         this.mobile = mobile;
 
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
-    public int getWidth() {
+    public double getWidth() {
         return width;
     }
 
@@ -52,12 +54,28 @@ public class PowerUp {
         this.width = width;
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(double height) {
         this.height = height;
+    }
+
+    public double getVelX() {
+        return velX;
+    }
+
+    public void setVelX(double velX) {
+        this.velX = velX;
+    }
+
+    public double getVelY() {
+        return velY;
+    }
+
+    public void setVelY(double velY) {
+        this.velY = velY;
     }
 
     public boolean isMobile() {
@@ -68,17 +86,17 @@ public class PowerUp {
         this.mobile = mobile;
     }
 
-    public void velocity() {
-        double x = velocity.x;
-        double y = velocity.y;
 
-        setX(getX() + (int) velocity.x);
-        setY(getY() + (int) velocity.y);
+    public void velocity(double VelX, double VelY) {
+        if (isMobile()) {
+            setX(getX() + VelX);
+            setY(getY() + VelY);
+        }
     }
 
     public void draw(Graphics g) {
         g.setColor(Color.YELLOW);
-        g.fillRect(x, y, width, height);
+        g.fillRect((int) x, (int) y, (int) width, (int) height);
     }
 
     public static void powerUpConstructor(int powerUpNumber) {
@@ -108,9 +126,10 @@ public class PowerUp {
                     Shape.myJoystick.setWidth(Shape.myJoystick.getWidth() / 2);
                 }
                 break;
-            case 4:if (Shape.myJoystick.getWidth() < Shape.screenWidth* 30 / 100) {
-                Shape.myJoystick.setWidth(Shape.myJoystick.getWidth() * 2);
-            }
+            case 4:
+                if (Shape.myJoystick.getWidth() < Shape.screenWidth * 30 / 100) {
+                    Shape.myJoystick.setWidth(Shape.myJoystick.getWidth() * 2);
+                }
                 break;
             case 5:
                 for (Brick brick : Brick.brickList) {
@@ -131,24 +150,20 @@ public class PowerUp {
                 break;
             case 10:
                 //create 1 more ball and make them bounce as if there is a mirror in the middle of them.
-                for (Ball ball : Ball.ballList) {
-                    ball.getX();
-                    ball.getY();
-                }
+
                 break;
             case 11:
                 //create 2 more ball and make them move with triangle shape.
                 break;
             case 12:
                 //create total of 8 balls out of 1 ball moving symmetrically away from each other
+
                 break;
             case 13:
                 Shape.myJoystick.setDefence(true);
                 break;
             case 14:
-                for (Ball ball : Ball.ballList) {
-                    ball.velocity();  // 2 kat hız
-                }
+
                 break;
             case 15:
 
