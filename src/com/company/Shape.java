@@ -33,7 +33,7 @@ public class Shape extends JFrame {
 
 
     static ControlStick myJoystick = new ControlStick(((Shape.screenWidth) - ((Shape.screenWidth) * 15 / 100)) / 2, Shape.screenHeight * 93 / 100, screenWidth * 15 / 100, (Shape.screenHeight) * 5 / 200, false, false, false);
-    private static Ball myFirstBall = new Ball(630, 600, 5, x, y, true, true, true);
+    private static Ball myFirstBall = new Ball(630, 600, 4, x, y, true, true);
     private static Wall myLeftWall = new Wall(0, ((Shape.screenHeight) * 4 / 100), (Shape.screenWidth) * 5 / (2 * 100), Shape.screenHeight);
     private static Wall myTopWall = new Wall(0, 0, Shape.screenWidth, ((Shape.screenHeight) * 6 / 100));
     private static Wall myRightWall = new Wall((Shape.screenWidth) - (Shape.screenWidth) * 5 / (2 * 100), 0, (Shape.screenWidth) * 5 / (2 * 100), Shape.screenHeight);
@@ -150,7 +150,6 @@ public class Shape extends JFrame {
 
         Timer timer2 = new Timer();
         TimerTask task2 = new TimerTask() {
-
 
             @Override
             public void run() {

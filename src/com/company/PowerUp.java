@@ -53,33 +53,6 @@ public class PowerUp {
         return width;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
-    }
-
-    public double getVelX() {
-        return velX;
-    }
-
-    public void setVelX(double velX) {
-        this.velX = velX;
-    }
-
-    public double getVelY() {
-        return velY;
-    }
-
-    public void setVelY(double velY) {
-        this.velY = velY;
-    }
 
     public boolean isMobile() {
         return mobile;
@@ -122,9 +95,9 @@ public class PowerUp {
 
         switch (powerUpNumber) {
             case 1:
-                /**
-                 *  making ball twice as big while maintaining maximum size
-                 */
+
+                 // making ball twice as big while maintaining maximum size
+
                 for (Ball ball : Ball.ballList) {
                     if (ball.getRadius() < 10) {
                         ball.setRadius(ball.getRadius() * 2);
@@ -174,8 +147,6 @@ public class PowerUp {
                 break;
             case 11:
                 //create 2 more ball and make them move with triangle shape.
-                break;
-            case 12:
                 double vectorLength;
                 for (Ball ball : Ball.ballList) {
                     double x = ball.getX();
@@ -184,12 +155,29 @@ public class PowerUp {
                     double velY = ball.getVelY();
                     vectorLength = Math.sqrt(velX * velX + velY * velY);
 
+                    for (int i = 0; i < 3; i++) {
+                        Ball myBall = new Ball(x, y, 5, vectorLength * Math.cos(Math.toRadians(i * 120)), vectorLength * Math.sin(Math.toRadians(i * 120)), true, false);
+                        Ball.ballList.add(myBall);
+                    }
+                }
+                break;
+            case 12:
+                //create 8 balls and make them move away from each other symmetrically
+                for (Ball ball : Ball.ballList) {
+                    double x = ball.getX();
+                    double y = ball.getY();
+                    double velX = ball.getVelX();
+                    double velY = ball.getVelY();
+                    vectorLength = Math.sqrt(velX * velX + velY * velY);
+
                     for (int i = 0; i < 8; i++) {
-                        new Ball(x, y, 5, vectorLength * Math.cos(Math.toRadians(i * 45)), vectorLength * Math.sin(Math.toRadians(i * 45)), true, false, true);
+                        Ball myBall =  new Ball(x, y, 5, vectorLength * Math.cos(Math.toRadians(i * 45)), vectorLength * Math.sin(Math.toRadians(i * 45)), true, false);
+                        Ball.ballList.add(myBall);
                     }
                 }
                 break;
             case 13:
+                //create a wall under the paddle that will reflect incoming balls for a limited time.
                 Shape.myJoystick.setDefence(true);
                 break;
             case 14:

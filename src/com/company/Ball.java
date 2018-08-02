@@ -1,13 +1,14 @@
 package com.company;
 
+
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import static com.company.Shape.myJoystick;
-import static com.company.Shape.screenHeight;
 import static com.company.Shape.velocity;
 
 
@@ -32,6 +33,8 @@ public class Ball extends Ellipse2D.Double {
         this.velY = velY;
         this.mobile = mobile;
         this.piercer = piercer;
+
+
     }
 
 
@@ -96,7 +99,9 @@ public class Ball extends Ellipse2D.Double {
     static void drawCircleByCenter(Graphics g, double x, double y, double radius) {
         g.setColor(Color.GRAY);
         g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
+
     }
+
 
 
     public void velocity() {
@@ -109,14 +114,14 @@ public class Ball extends Ellipse2D.Double {
 
         if (getY() >= Shape.screenHeight + getRadius()) {
             for (Ball ball : Ball.ballList) {
-                    ball.setX(0);
-                    ball.setY(0);
-                    velocity.x = 0;
-                    velocity.y = 0;
-                    ball.setMobile(false);
-                    if (!isMobile()) {
-                        System.out.println("Game Over");
-                    }
+                ball.setX(0);
+                ball.setY(0);
+                velocity.x = 0;
+                velocity.y = 0;
+                ball.setMobile(false);
+                if (!isMobile()) {
+                    System.out.println("Game Over");
+                }
 
 
             }
@@ -231,7 +236,7 @@ public class Ball extends Ellipse2D.Double {
         int chanceToGetPowerUp = random.nextInt(6) + 1;
         if (chanceToGetPowerUp == 1) {
             PowerUp powerUp = new PowerUp(brick.getX() + brick.getWidth() / 4, brick.getY() - 30, 25, 25, 0, 0.125, true);
-            PowerUp.powerUpNumber = 13;
+            PowerUp.powerUpNumber = random.nextInt(15) + 1;
             PowerUp.powerUpList.add(powerUp);
 
         }
