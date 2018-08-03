@@ -1,55 +1,33 @@
 package com.company;
 
-
 import java.awt.*;
 
-public class ControlStick {
+public class ControlStick extends GameObject {
 
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+    private double width;
+    private double height;
     private boolean weapon;
     private boolean grasp;
-    private boolean defence;
 
-
-    public ControlStick(int x, int y, int width, int height, boolean weapon, boolean grasp, boolean defence) {
-        this.x = x;
-        this.y = y;
+    public ControlStick(double x, double y, double width, double height, boolean weapon, boolean grasp) {
+        super(x, y, 0, 0, false);
         this.width = width;
         this.height = height;
         this.weapon = weapon;
         this.grasp = grasp;
-        this.defence = defence;
     }
 
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-
-    public int getWidth() {
+    public double getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(double width) {
         this.width = width;
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
-
 
     public boolean isWeapon() {
         return weapon;
@@ -67,18 +45,9 @@ public class ControlStick {
         this.grasp = grasp;
     }
 
-    public boolean isDefence() {
-        return defence;
-    }
-
-    public void setDefence(boolean defence) {
-        this.defence = defence;
-    }
-
     public void draw(Graphics g) {
         g.setColor(Color.BLACK);
-        g.fillRect(x, y, width, height);
+        g.fillRect((int) getX(), (int) getY(), (int) width, (int) height);
     }
-
 
 }

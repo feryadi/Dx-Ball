@@ -2,16 +2,13 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
-
-public class Shape extends JFrame {
-
-
-    static public int[][] map;
+public class Game extends JFrame {
 
     private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -23,25 +20,19 @@ public class Shape extends JFrame {
     static double y = -speed;
     private static int playerHealth = 2;
 
-    static Vector velocity = new Vector(x, y);
-
-
     /**
      * left wall uses 2.5% of the width of the screen
      * right wall uses 4% of the height of the screen
      */
 
+    public static List<GameObject> gameObjectList = new ArrayList<>();
+    public static List<GameObject> waitList = new ArrayList<>();
 
-    static ControlStick myJoystick = new ControlStick(((Shape.screenWidth) - ((Shape.screenWidth) * 15 / 100)) / 2, Shape.screenHeight * 93 / 100, screenWidth * 15 / 100, (Shape.screenHeight) * 5 / 200, false, false, false);
-    private static Ball myFirstBall = new Ball(630, 600, 4, x, y, true, true);
-    private static Wall myLeftWall = new Wall(0, ((Shape.screenHeight) * 4 / 100), (Shape.screenWidth) * 5 / (2 * 100), Shape.screenHeight);
-    private static Wall myTopWall = new Wall(0, 0, Shape.screenWidth, ((Shape.screenHeight) * 6 / 100));
-    private static Wall myRightWall = new Wall((Shape.screenWidth) - (Shape.screenWidth) * 5 / (2 * 100), 0, (Shape.screenWidth) * 5 / (2 * 100), Shape.screenHeight);
-    private static Weapon myLeftWeapon = new Weapon(myJoystick.getX() + 10, myJoystick.getY() - 10, 7, 15, true, false, false);
-    private static Weapon myRightWeapon = new Weapon(myJoystick.getX() + myJoystick.getWidth() - 20, myJoystick.getY() - 10, 7, 15, true, false, false);
-    private static Wall defenceWall = new Wall(0, (Shape.screenHeight) * 95 / 100, (Shape.screenWidth), 10);
+    public static ControlStick myJoystick = new ControlStick(((Game.screenWidth) - ((Game.screenWidth) * 15 / 100)) / 2, Game.screenHeight * 93 / 100, screenWidth * 15 / 100, (Game.screenHeight) * 5 / 200, false, false);
 
-    public Shape(int width, int height) {
+    public static Wall defenceWall;
+
+    public Game(int width, int height) {
         setSize(width, height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
@@ -54,19 +45,14 @@ public class Shape extends JFrame {
 
             @Override
             public void mouseMoved(MouseEvent e) {
-
                 myJoystick.setX(e.getX() - (myJoystick.getWidth() / 2));
-                if (myJoystick.getX() < myRightWall.getWidth()) {
+           /*     if (myJoystick.getX() < myRightWall.getWidth()) {
                     myJoystick.setX(myRightWall.getWidth());
                 }
                 if (myJoystick.getX() + myJoystick.getWidth() > myRightWall.getX()) {
                     myJoystick.setX(screenWidth - myRightWall.getWidth() - myJoystick.getWidth());
-                }
-                myLeftWeapon.setX(myJoystick.getX() + Shape.myJoystick.getWidth() / 10);
-                myRightWeapon.setX(myJoystick.getX() + myJoystick.getWidth() - Shape.myJoystick.getWidth() / 10 - myRightWeapon.getWidth());
-
+                }*/
             }
-
         }));
         {
 
@@ -75,12 +61,10 @@ public class Shape extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    Ammo myLeftAmmo = new Ammo(myLeftWeapon.getX(), myLeftWeapon.getY(), 4, 0, -5, true);
-                        Ammo myRightAmmo = new Ammo(myRightWeapon.getX(), myRightWeapon.getY(), 4, 0, -5, true);
-                        Ammo.ammoList.add(myLeftAmmo);
-                        Ammo.ammoList.add(myRightAmmo);
-
-
+                    Ammo myLeftAmmo = new Ammo(myJoystick.getX() - 20, myJoystick.getY(), 4, 0, -0.1, true);
+                    Ammo myRightAmmo = new Ammo(myJoystick.getX() - 10, myJoystick.getY(), 4, 0, -0.1, true);
+                    addGameObject(myLeftAmmo);
+                    addGameObject(myRightAmmo);
                 }
             }
 
@@ -129,18 +113,18 @@ public class Shape extends JFrame {
 
         setVisible(true);
         Brick.placeBricks(25, 20);
-        Brick.brickList.add(myLeftWall);
-        Brick.brickList.add(myRightWall);
-        Brick.brickList.add(myTopWall);
-        Ball.ballList.add(myFirstBall);
-        if (myJoystick.isDefence()) {
-            Brick.brickList.add(defenceWall);
-        }
+        addGameObject(myJoystick);
+        addGameObject(new Ball(630, 600, 4, x, y, true, false));
+        addGameObject(new Wall(0, ((Game.screenHeight) * 4 / 100), (Game.screenWidth) * 5 / (2 * 100), Game.screenHeight));
+        addGameObject(new Wall(0, 0, Game.screenWidth, ((Game.screenHeight) * 6 / 100)));
+        addGameObject(new Wall((Game.screenWidth) - (Game.screenWidth) * 5 / (2 * 100), 0, (Game.screenWidth) * 5 / (2 * 100), Game.screenHeight));
+        defenceWall = new Wall(0, (Game.screenHeight) * 95 / 100, (Game.screenWidth), 10);
+        defenceWall.setEnabled(false);
+        addGameObject(defenceWall);
+
 
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
-
-
             @Override
             public void run() {
                 repaint();
@@ -153,18 +137,22 @@ public class Shape extends JFrame {
 
             @Override
             public void run() {
-                for (Ball ball : Ball.ballList) {
-                    ball.velocity();
+                for (GameObject gameObject : gameObjectList) {
+                    gameObject.update();
                 }
-                for (Ammo ammo : Ammo.ammoList) {
-                    ammo.velocity(0, -0.125);
+
+                for (int i = 0; i < gameObjectList.size() - 1; i++) {
+                    for (int j = i; j < gameObjectList.size(); j++) {
+                        CollisionManager.onCollision(gameObjectList.get(i), gameObjectList.get(j));
+                    }
                 }
-                for (PowerUp powerUp : PowerUp.powerUpList) {
-                    powerUp.velocity(0, 0.125);
-                }
+
+                gameObjectList = new ArrayList<>(gameObjectList);
+                gameObjectList.addAll(waitList);
+                waitList.clear();
             }
         };
-        timer.scheduleAtFixedRate(task2, 0, 1);
+        timer2.scheduleAtFixedRate(task2, 0, 1);
 
     }
 
@@ -178,39 +166,23 @@ public class Shape extends JFrame {
         graphics.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 
 
-        Ball.drawCircleByCenter(graphics, myFirstBall.getX(), myFirstBall.getY(), myFirstBall.getRadius());
-        for (Ammo ammo : Ammo.ammoList) {
-            Ball.drawCircleByCenter(graphics, ammo.getX(), ammo.getY(), ammo.getRadius());
-        }
-        myJoystick.draw(graphics);
-        if (myJoystick.isWeapon()) {
-            myLeftWeapon.draw(graphics);
-            myRightWeapon.draw(graphics);
-        }
-        if(myJoystick.isDefence()){
-            defenceWall.draw(graphics);
-        }
-
-
-        for (Brick brick : Brick.brickList) {
-            brick.draw(graphics);
-        }
-        for (PowerUp powerUp : PowerUp.powerUpList) {
-            powerUp.draw(graphics);
-        }
-
+        gameObjectList.forEach(gameObject -> gameObject.draw(graphics));
 
         Graphics2D g2dComponent = (Graphics2D) g;
         g2dComponent.drawImage(bufferedImage, null, 0, 0);
     }
-
 
     public static int getPlayerHealth() {
         return playerHealth;
     }
 
     public static void setPlayerHealth(int playerHealth) {
-        Shape.playerHealth = playerHealth;
+        Game.playerHealth = playerHealth;
     }
+
+    public static void addGameObject(GameObject gameObject) {
+        waitList.add(gameObject);
+    }
+
 }
 
