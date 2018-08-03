@@ -12,12 +12,9 @@ public class Game extends JFrame {
 
     private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    final static double speed = 0.250;
 
     static int screenHeight = screenSize.height;
     static int screenWidth = screenSize.width;
-    static double x = speed;
-    static double y = -speed;
     private static int playerHealth = 2;
 
     /**
@@ -114,7 +111,7 @@ public class Game extends JFrame {
         setVisible(true);
         Brick.placeBricks(25, 20);
         addGameObject(myJoystick);
-        addGameObject(new Ball(630, 600, 4, x, y, true, false));
+        addGameObject(new Ball(630, 600, 4, 0.250, 0.250, true, true));
         addGameObject(new Wall(0, ((Game.screenHeight) * 4 / 100), (Game.screenWidth) * 5 / (2 * 100), Game.screenHeight));
         addGameObject(new Wall(0, 0, Game.screenWidth, ((Game.screenHeight) * 6 / 100)));
         addGameObject(new Wall((Game.screenWidth) - (Game.screenWidth) * 5 / (2 * 100), 0, (Game.screenWidth) * 5 / (2 * 100), Game.screenHeight));
