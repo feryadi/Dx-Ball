@@ -5,19 +5,17 @@ import java.util.Random;
 
 
 public class PowerUp extends GameObject {
-    public static Random random = new Random();
     private double width;
     private double height;
     private boolean mobile;
-    int powerUpNumber;
+    PowerUpType powerUpNumber;
 
     public PowerUp(double x, double y, boolean mobile) {
         super(x, y, 0, 0.125, mobile);
         this.width = 25;
         this.height = 25;
         this.mobile = mobile;
-        powerUpNumber = random.nextInt(15) + 1;
-        //      powerUpNumber = 12;
+        powerUpNumber = PowerUpType.getPowerUp();
     }
 
     public double getWidth() {
@@ -37,9 +35,9 @@ public class PowerUp extends GameObject {
         g.fillRect((int) getX(), (int) getY(), (int) width, (int) height);
     }
 
-    public static void powerUpConstructor(int powerUpNumber) {
-        switch (powerUpNumber) {
-            case 1:
+    public static void powerUpConstructor(PowerUpType powerUpType) {
+        switch (powerUpType) {
+            case LARGE_BALL:
                 // making ball twice as big while maintaining maximum size
 
                 for (GameObject gameObject : Game.gameObjectList) {
@@ -52,8 +50,7 @@ public class PowerUp extends GameObject {
                 }
 
                 break;
-            case 2:
-
+            case SMALL_BALL:
                 for (GameObject gameObject : Game.gameObjectList) {
                     if (gameObject instanceof Ball) {
                         Ball ball = (Ball) gameObject;
@@ -65,17 +62,17 @@ public class PowerUp extends GameObject {
 
 
                 break;
-            case 3:
+            case SMALL_PADLE:
                 if (Game.myJoystick.getWidth() > Game.screenWidth * 15 / 200) {
                     Game.myJoystick.setWidth(Game.myJoystick.getWidth() / 5 * 4);
                 }
                 break;
-            case 4:
+            case LARGE_PADLE:
                 if (Game.myJoystick.getWidth() < Game.screenWidth * 20 / 100) {
                     Game.myJoystick.setWidth(Game.myJoystick.getWidth() * 5 / 4);
                 }
                 break;
-            case 5:
+            case BRICK_CURSE:
                 for (GameObject gameObject : Game.gameObjectList) {
                     if (gameObject instanceof Brick) {
                         Brick brick = (Brick) gameObject;
@@ -83,19 +80,19 @@ public class PowerUp extends GameObject {
                     }
                 }
                 break;
-            case 6:
+            case LIFE_UP:
                 Game.setPlayerHealth(Game.getPlayerHealth() + 1);
                 break;
-            case 7:
+            case LIFE_DOWN:
                 Game.setPlayerHealth(Game.getPlayerHealth() - 1);
                 break;
-            case 8:
+            case WEAPON:
                 Game.myJoystick.setWeapon(true);
                 break;
-            case 9:
+            case GRASP:
                 Game.myJoystick.setGrasp(true);
                 break;
-            case 10:
+            case PIERCING_BALL:
                 for (GameObject gameObject : Game.gameObjectList) {
                     if (gameObject instanceof Ball) {
                         Ball ball = (Ball) gameObject;
@@ -104,7 +101,7 @@ public class PowerUp extends GameObject {
                 }
 
                 break;
-            case 11:
+            case THREE_BALL:
                 //create 2 more ball and make them move with triangle shape.
 
                 double vectorLength;
@@ -128,7 +125,7 @@ public class PowerUp extends GameObject {
                 }
 
                 break;
-            case 12:
+            case EIGHT_BALL:
                 //create 8 balls and make them move away from each other symmetrically
 
                 for (GameObject gameObject : Game.gameObjectList) {
@@ -140,7 +137,7 @@ public class PowerUp extends GameObject {
                         double velY = ball.getVelY();
                         vectorLength = Math.sqrt(velX * velX + velY * velY);
 
-                        for (int i = 0; i < 3; i++) {
+                        for (int i = 0; i < 8; i++) {
                             Ball myBall = new Ball(x, y, 5, vectorLength * Math.cos(Math.toRadians(i * 45)), vectorLength * Math.sin(Math.toRadians(i * 45)), true, false);
                             Game.addGameObject(myBall);
                         }
@@ -148,17 +145,63 @@ public class PowerUp extends GameObject {
                 }
 
                 break;
-            case 13:
+            case DEFENCE:
                 //create a wall under the paddle that will reflect incoming balls for a limited time.
                 Game.defenceWall.setEnabled(true);
                 break;
-            case 14:
-
-                break;
-            case 15:
-
-                break;
         }
     }
+
+
+    enum PowerUpType {
+        LARGE_BALL(1),
+        SMALL_BALL(1),
+        PIERCING_BALL(1),
+        DEFENCE(1),
+        WEAPON(1),
+        THREE_BALL(1),
+        EIGHT_BALL(100),
+        SMALL_PADLE(1),
+        LARGE_PADLE(1),
+        LIFE_UP(1),
+        LIFE_DOWN(1),
+        GRASP(1),
+        BRICK_CURSE(1);
+
+        private static double totalWeight = -1;
+        private final double weight;
+
+        PowerUpType(double weight) {
+            this.weight = weight;
+        }
+
+        private static void setTotalWeight() {
+            if (totalWeight != -1)
+                return;
+
+            totalWeight = 0;
+
+            for (PowerUpType value : PowerUpType.values()) {
+                totalWeight += value.weight;
+            }
+        }
+
+        static PowerUpType getPowerUp() {
+            setTotalWeight();
+
+            Random random = new Random();
+            double v = random.nextDouble() * totalWeight;
+
+            double a = 0;
+            for (PowerUpType value : PowerUpType.values()) {
+                a += value.weight;
+                if (a > v) {
+                    return value;
+                }
+            }
+            return LARGE_BALL;
+        }
+    }
+
 
 }
